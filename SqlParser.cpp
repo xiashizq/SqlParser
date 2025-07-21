@@ -3,7 +3,7 @@
 
 QList<FieldValuePos> SqlParser::parseInsertWithPos(const QString &sql) {
     QList<FieldValuePos> result;
-    QRegularExpression re(R"(INSERT\s+INTO\s+\w+\s*\(([^)]+)\)\s*VALUES\s*\(([^)]+)\))", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpression re(R"(INSERT\s+(?:INTO\s+)?(?:\w+\.)?\w+\s*\(([^)]+)\)\s*VALUES\s*\(([^)]+)\))", QRegularExpression::CaseInsensitiveOption);
     auto m = re.match(sql);
     if (!m.hasMatch()) return result;
     QString fieldsStr = m.captured(1);

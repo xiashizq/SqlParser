@@ -6,12 +6,21 @@
 #include <QTextEdit>
 #include <QTextCursor>
 #include <QColor>
+#include <QIcon>
+#include <QMenuBar>
+#include <QMenu>
+#include <QAction>
+
 #pragma execution_character_set("utf-8")
-MainWindow::MainWindow(QWidget *parent)
-    : QWidget(parent)
+
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
-    auto *layout = new QVBoxLayout(this);
+
     this->setWindowTitle("SqlParser-AuroraTest");
+    this->setWindowIcon(QIcon(":/iocn1.png"));
+
+    auto *central = new QWidget(this);
+    auto *layout = new QVBoxLayout(central);
     textEdit = new CodeEditor(this);
 
     QFont font;
@@ -47,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     font.setPointSize(16);
     textEdit->setFont(font);
     layout->addWidget(textEdit);
-    setLayout(layout);
+    //setLayout(layout);
     resize(900, 500);
 
     highlighter = new SqlHighlighter(textEdit->document());
@@ -55,12 +64,24 @@ MainWindow::MainWindow(QWidget *parent)
     textEdit->setPlainText(
         "INSERT INTO sys_user\n"
         "(user_id, username, password, nickname, avatar, sex, phone, email, email_verified, real_name, id_card, birthday, introduction, status, deleted, create_time, update_time)\n"
-        "VALUES(1, 'admin', 'xxxx', '管理员', 'xxx', 1, '12345678901', NULL, 0, NULL, NULL, '2021-05-21', '遗其欲，则心静！', 0, 0, '2020-01-13 14:43:52', '2025-07-05 14:22:12');\n"
-        "INSERT INTO sys_user(user_id, username) VALUES(2, 'user2');\n"
-        "INSERT INTO sys_user(user_id, username) VALUES(3, 'user3');\n"
+        "VALUES(1, 'admin', 'xxxx', '管理员', 'xxx', 1, '12345678901', NULL, 0, NULL, NULL, '2021-05-21', '遗其欲，则心静！', 0, 0, '2020-01-13 14:43:52', '2025-07-05 14:22:12');"
         );
 
     connect(textEdit, &QPlainTextEdit::cursorPositionChanged, this, &MainWindow::onCursorChanged);
+
+
+    layout->addWidget(textEdit);
+    central->setLayout(layout);
+    setCentralWidget(central);
+
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+
+//    QMenuBar *menuBar = this->menuBar();
+//    menuBar->addMenu("文件");
+//    menuBar->addMenu("美化");
+
+
 }
 
 void MainWindow::onCursorChanged()

@@ -1,9 +1,9 @@
 ﻿#pragma once
-#include <QWidget>
+#include <QMainWindow>
 class CodeEditor;
 class SqlHighlighter;
 
-class MainWindow : public QWidget
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:

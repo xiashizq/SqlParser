@@ -20,7 +20,7 @@ int CodeEditor::lineNumberAreaWidth()
         max /= 10;
         ++digits;
     }
-    int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
+    int space = 8 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
     return space;
 }
 
@@ -53,22 +53,50 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
-    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + (int) blockBoundingRect(block).height();
+    int top = static_cast<int>(blockBoundingGeometry(block).translated(contentOffset()).top());
+    int bottom = top + static_cast<int>(blockBoundingRect(block).height());
 
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
+            QRect rect(0, top, lineNumberArea->width(), fontMetrics().height());
+            // 居中
             painter.setPen(Qt::gray);
-            painter.drawText(0, top, lineNumberArea->width()-2, fontMetrics().height(),
-                             Qt::AlignRight, number);
+            painter.drawText(rect, Qt::AlignCenter, number);
         }
+
         block = block.next();
         top = bottom;
-        bottom = top + (int) blockBoundingRect(block).height();
+        bottom = top + static_cast<int>(blockBoundingRect(block).height());
         ++blockNumber;
     }
 }
+
+//void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
+//{
+//    QPainter painter(lineNumberArea);
+//    painter.fillRect(event->rect(), QColor("#eeeeee"));
+
+//    QTextBlock block = firstVisibleBlock();
+//    int blockNumber = block.blockNumber();
+//    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
+//    int bottom = top + (int) blockBoundingRect(block).height();
+
+//    while (block.isValid() && top <= event->rect().bottom()) {
+//        if (block.isVisible() && bottom >= event->rect().top()) {
+//            QString number = QString::number(blockNumber + 1);
+//            QRect rect(0, top, lineNumberArea->width(), fontMetrics().height());
+//            painter.setPen(Qt::gray);
+//            painter.drawText(0, top, lineNumberArea->width()-2, fontMetrics().height(),
+//                             Qt::AlignRight, number);
+//            painter.drawText(rect, Qt::AlignCenter, number);
+//        }
+//        block = block.next();
+//        top = bottom;
+//        bottom = top + (int) blockBoundingRect(block).height();
+//        ++blockNumber;
+//    }
+//}
 
 //void CodeEditor::highlightCurrentLine()
 //{

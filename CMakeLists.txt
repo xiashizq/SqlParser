@@ -12,6 +12,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -23,6 +25,7 @@ set(PROJECT_SOURCES
         SqlHighlighter.h
         CodeEditor.h
         CodeEditor.cpp
+        qrc.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -63,6 +66,11 @@ install(TARGETS SqlParser
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+if(WIN32)
+    set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/sqlparser.rc")
+    target_sources(SqlParser PRIVATE ${APP_ICON_RESOURCE_WINDOWS})
+endif()
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(SqlParser)
